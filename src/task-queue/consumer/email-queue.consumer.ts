@@ -35,7 +35,6 @@ export class EmailQueueConsumer {
 
   @OnQueueEvent(BullQueueEvents.COMPLETED)
   onCompleted(job: Job) {
-    console.log(job);
     this.logger.warn(
       `Completed - Email Queue ID ${job.id} with RESULT: ${
         job.returnvalue

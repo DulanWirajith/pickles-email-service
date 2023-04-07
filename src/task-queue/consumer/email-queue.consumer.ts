@@ -56,7 +56,11 @@ export class EmailQueueConsumer {
         },
       });
 
-      await this.makeConnection(emailRes.id, logRes.id);
+      await this.makeConnection(
+        emailRes.id,
+        logRes.id,
+        EmailStatusEnum.PROCESS,
+      );
     } catch (e) {
       throw new BadRequestException(e);
     }
@@ -90,7 +94,11 @@ export class EmailQueueConsumer {
         },
       });
 
-      await this.makeConnection(emailRes.id, logRes.id);
+      await this.makeConnection(
+        emailRes.id,
+        logRes.id,
+        EmailStatusEnum.SUCCESS,
+      );
     } catch (e) {
       throw new BadRequestException(e);
     }
@@ -98,20 +106,50 @@ export class EmailQueueConsumer {
 
   @OnQueueEvent(BullQueueEvents.FAILED)
   async onFail(job: Job) {
-    this.logger.error(
-      `Failed - Email Queue ID ${job.id} with RESULT: ${
-        job.returnvalue
-      } and DATA: ${JSON.stringify(job)}`,
-    );
-    // todo :when Event Failed
+    try {
+      this.logger.error(
+        `Failed - Email Queue ID ${job.id} with RESULT: ${
+          job.returnvalue
+        } and DATA: ${JSON.stringify(job)}`,
+      );
+
+      const { externalId } = job.data;
+      const emailRes = await this.prisma.email.findUnique({
+        where: {
+          externalId,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      const logRes = await this.prisma.taskQueueLog.create({
+        data: {
+          queueName: EMAIL_QUEUE,
+          jobId: job.id.toString(),
+          jobData: job.data,
+          job: job as any,
+          status: EmailStatusEnum.FAILED,
+        },
+      });
+
+      await this.makeConnection(emailRes.id, logRes.id, EmailStatusEnum.FAILED);
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
   }
 
-  async makeConnection(emailId: string, logId: string) {
+  async makeConnection(
+    emailId: string,
+    logId: string,
+    emailStatus: EmailStatusEnum,
+  ) {
     await this.prisma.email.update({
       where: {
         id: emailId,
       },
       data: {
+        status: emailStatus,
         logs: {
           connect: {
             id: logId,

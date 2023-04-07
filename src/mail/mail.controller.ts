@@ -14,4 +14,9 @@ export class MailController {
   sendMail(@Body() mailSendDto: MailSendDto) {
     return this.mailService.sendTheMail(mailSendDto);
   }
+
+  @Post('handle-mail-send')
+  handleMailSend(@Body() mailSendDto: MailSendDto) {
+    return this.mailService.handleMailSend(mailSendDto);
+  }
 }

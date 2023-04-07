@@ -4,6 +4,9 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { join } from 'path';
 import { MailService } from './mail.service';
 import { MailController } from './mail.controller';
+import { TaskQueueService } from '../task-queue/task-queue.service';
+import { TaskQueueModule } from '../task-queue/task-queue.module';
+import { EmailQueueProducer } from '../task-queue/producer/email-queue.producer';
 
 @Global()
 @Module({
@@ -25,8 +28,9 @@ import { MailController } from './mail.controller';
         },
       },
     }),
+    TaskQueueModule,
   ],
-  providers: [MailService],
+  providers: [MailService, TaskQueueService, EmailQueueProducer],
   exports: [MailService],
   controllers: [MailController],
 })

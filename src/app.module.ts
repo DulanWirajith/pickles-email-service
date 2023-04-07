@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from './util/logger.middleware';
 import { MailModule } from './mail/mail.module';
+import { TaskQueueModule } from './task-queue/task-queue.module';
 
 @Module({
   imports: [
@@ -17,9 +18,12 @@ import { MailModule } from './mail/mail.module';
         EMAIL_HOST: Joi.string().required(),
         EMAIL_USER: Joi.string().required(),
         EMAIL_PASSWORD: Joi.string().required(),
+        REDIS_HOST: Joi.string().required(),
+        REDIS_PORT: Joi.string().required(),
       }),
       envFilePath: '.env',
     }),
+    TaskQueueModule,
   ],
   controllers: [AppController],
   providers: [AppService],

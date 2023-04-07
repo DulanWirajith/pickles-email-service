@@ -38,13 +38,26 @@ export class EmailQueueConsumer {
       );
 
       const { externalId, to, emailType } = job.data;
-      const emailRes = await this.prisma.email.create({
-        data: {
-          externalId,
-          to,
-          type: emailType,
-        },
-      });
+      let emailRes;
+
+      if (job.attemptsMade === 0) {
+        emailRes = await this.prisma.email.create({
+          data: {
+            externalId,
+            to,
+            type: emailType,
+          },
+        });
+      } else {
+        emailRes = await this.prisma.email.findUnique({
+          where: {
+            externalId,
+          },
+          select: {
+            id: true,
+          },
+        });
+      }
 
       const logRes = await this.prisma.taskQueueLog.create({
         data: {

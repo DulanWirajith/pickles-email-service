@@ -19,13 +19,6 @@ export class MailSendDto {
   from: string;
 
   @ApiProperty({
-    description: 'first name',
-    example: 'Dulan',
-  })
-  @IsString()
-  firstName: string;
-
-  @ApiProperty({
     description: 'email type',
     example: 'CONFIRM_EMAIL',
   })

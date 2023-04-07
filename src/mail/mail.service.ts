@@ -1,5 +1,5 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { MailSendDto } from './dto/mail-send.dto';
 
 @Injectable()
@@ -22,8 +22,8 @@ export class MailService {
       });
       this.logger.log(`mail sent successfully to: ${mailSendDto.to}`);
     } catch (e) {
-      // todo ERROR HANDLING
-      console.log(e);
+      this.logger.log(JSON.stringify(e));
+      throw new BadRequestException(e);
     }
   }
 }

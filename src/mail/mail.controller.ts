@@ -12,7 +12,6 @@ export class MailController {
 
   @Post('send-mail')
   sendMail(@Body() mailSendDto: MailSendDto) {
-    console.log(mailSendDto);
     return this.mailService.sendTheMail(mailSendDto);
   }
 }

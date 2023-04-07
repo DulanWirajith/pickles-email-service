@@ -36,10 +36,8 @@ export class EmailQueueConsumer {
           job.data,
         )}`,
       );
-      // todo :when Event Run
 
       const { externalId, to, emailType } = job.data;
-      console.log(job.data);
       const emailRes = await this.prisma.email.create({
         data: {
           externalId,

@@ -1,5 +1,6 @@
 import { IsEmail, IsObject, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { EmailTypesEnum } from '../enum/email-types.enum';
 
 export class MailSendDto {
   @ApiProperty({
@@ -18,25 +19,11 @@ export class MailSendDto {
   from: string;
 
   @ApiProperty({
-    description: 'first name',
-    example: 'Dulan',
+    description: 'email type',
+    example: 'CONFIRM_EMAIL',
   })
   @IsString()
-  firstName: string;
-
-  @ApiProperty({
-    description: 'subject',
-    example: 'This is Testing',
-  })
-  @IsString()
-  subject: string;
-
-  @ApiProperty({
-    description: 'template name',
-    example: './confirmation',
-  })
-  @IsString()
-  template: string;
+  emailType: EmailTypesEnum;
 
   @ApiProperty({
     description: 'context',

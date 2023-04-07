@@ -1,0 +1,10 @@
+# Review for all pull requests
+*       @dulanwirajith
+
+# Github configs PR reviewer
+.github/* @dulanwirajith
+.husky/* @dulanwirajith
+.eslintrc.js @dulanwirajith
+.lintstagedrc @dulanwirajith
+.prettierrc @dulanwirajith
+tsconfig.json @dulanwirajith

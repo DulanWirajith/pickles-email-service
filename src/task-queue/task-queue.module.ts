@@ -6,6 +6,7 @@ import { TaskQueueService } from './task-queue.service';
 import { EMAIL_QUEUE } from './constants/task-queue-names.constant';
 import { EmailQueueProducer } from './producer/email-queue.producer';
 import { EmailQueueConsumer } from './consumer/email-queue.consumer';
+import { PrismaService } from '../prisma.service';
 
 @Module({
   imports: [
@@ -24,7 +25,12 @@ import { EmailQueueConsumer } from './consumer/email-queue.consumer';
     }),
   ],
   controllers: [TaskQueueController],
-  providers: [TaskQueueService, EmailQueueProducer, EmailQueueConsumer],
+  providers: [
+    TaskQueueService,
+    EmailQueueProducer,
+    EmailQueueConsumer,
+    PrismaService,
+  ],
   exports: [TaskQueueService, BullModule],
 })
 export class TaskQueueModule {}

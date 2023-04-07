@@ -7,7 +7,7 @@ export class MailSendDto {
     description: 'external Id for identify email send request',
     example: '015cb4b5-f574-4881-a397-acd928b317c0',
   })
-  @IsEmail()
+  @IsString()
   externalId: string;
 
   @ApiProperty({

@@ -12,5 +12,5 @@ RUN yarn build
 #ENV PM2_SECRET_KEY 1868cnzeditsg9t
 #
 #CMD ["pm2-runtime", "dist/main.js", "--name va-api-qa"]
-#CMD ["node", "dist/main"]
-CMD [ "npm", "run" , "start:prod" ]
+CMD ["node", "dist/main"]
+#CMD [ "npm", "run" , "start:prod" ]

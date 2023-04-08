@@ -30,7 +30,6 @@ export class MailController {
 
   @Get('/get-all-mails')
   getAllEmails(@Query() getEmailsQueryDto: GetEmailsQueryDto) {
-    console.log(getEmailsQueryDto);
     return this.mailService.getAllEmails(getEmailsQueryDto);
   }
 }

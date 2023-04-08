@@ -25,7 +25,6 @@ export class EmailQueueConsumer {
 
   @Process()
   async sendEmail(job: Job<unknown>) {
-    console.log(job.data);
     await this.mailService.sendTheMail(job.data as MailSendDto);
   }
 

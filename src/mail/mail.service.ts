@@ -29,7 +29,7 @@ export class MailService {
         context: mailSendDto.context,
       });
       this.logger.log(`mail sent successfully to: ${mailSendDto.to}`);
-      throw new BadRequestException();
+      // throw new BadRequestException();
     } catch (e) {
       throw new BadRequestException(e);
     }

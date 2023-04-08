@@ -27,7 +27,6 @@ export class TaskQueueService {
   ) {
     // eslint-disable-next-line no-restricted-syntax
     for (const failedJob of failedJobs) {
-      console.log('failedJob>>', failedJob);
       const { attributes, ...rest } = failedJob;
       // eslint-disable-next-line no-await-in-loop
       await this.emailQueueProducerService.emailJob(

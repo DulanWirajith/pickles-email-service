@@ -32,13 +32,14 @@ export class EmailQueueConsumer {
   @OnQueueActive()
   async onActive(job: Job) {
     try {
+      this.logger.log(job.data);
       this.logger.debug(
         `Processing - Email Queue ID: ${job.id} with DATA: ${JSON.stringify(
           job.data,
         )}`,
       );
 
-      const { externalId, to, emailType } = job.data;
+      const { externalId, to, emailType, context } = job.data;
       let emailRes;
 
       if (job.attemptsMade === 0 && job.data.isNewAttempt) {
@@ -47,6 +48,9 @@ export class EmailQueueConsumer {
             externalId,
             to,
             type: emailType,
+            attributes: {
+              context,
+            },
           },
         });
       } else {

@@ -18,6 +18,7 @@ model Email {
   to            String
   type          EmailTypesEnum
   attemptsCount Int             @default(0)
+  attributes    Json?
   status        EmailStatusEnum @default(PROCESS)
   logs          TaskQueueLog[]
 }

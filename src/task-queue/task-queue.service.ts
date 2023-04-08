@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Email } from '@prisma/client';
+import { EmailTypesEnum } from '@prisma/client';
 import { MailSendDto } from '../mail/dto/mail-send.dto';
 import { EmailQueueProducer } from './producer/email-queue.producer';
 
@@ -8,18 +8,36 @@ export class TaskQueueService {
   constructor(private readonly emailQueueProducerService: EmailQueueProducer) {}
 
   public async addToEmailQueue(mailSendDto: MailSendDto) {
-    await this.emailQueueProducerService.emailJob({
-      ...mailSendDto,
-      isNewAttempt: true,
-    });
+    await this.emailQueueProducerService.emailJob(
+      {
+        ...mailSendDto,
+        isNewAttempt: true,
+      },
+      1,
+    );
   }
 
-  public async addToEmailQueueReAttempt(failedJobs: Email[]) {
-    console.log('failed jobs>>', failedJobs);
-
-    // await this.emailQueueProducerService.emailJob({
-    //   ...mailSendDto,
-    //   isNewAttempt: false,
-    // });
+  public async addToEmailQueueReAttempt(
+    failedJobs: {
+      externalId: string;
+      to: string;
+      type: EmailTypesEnum;
+      attributes: any;
+    }[],
+  ) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const failedJob of failedJobs) {
+      console.log('failedJob>>', failedJob);
+      const { attributes, ...rest } = failedJob;
+      // eslint-disable-next-line no-await-in-loop
+      await this.emailQueueProducerService.emailJob(
+        {
+          ...rest,
+          context: attributes.context,
+          isNewAttempt: false,
+        },
+        2,
+      );
+    }
   }
 }

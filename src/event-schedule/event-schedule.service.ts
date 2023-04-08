@@ -12,11 +12,10 @@ export class EventScheduleService {
     private readonly taskQueueService: TaskQueueService,
   ) {}
 
-  @Cron(CronExpression.EVERY_10_SECONDS, {
+  @Cron(CronExpression.EVERY_10_MINUTES, {
     name: 'resend_failed_mails',
   })
   async deleteExpiredUsers() {
-    // this.logger.log('Deleting expired users...');
     const failedJobs = await this.prisma.email.findMany({
       where: {
         status: EmailStatusEnum.FAILED,
@@ -24,6 +23,12 @@ export class EventScheduleService {
           gte: moment().subtract(1, 'hour').toISOString(),
           lt: moment().toISOString(),
         },
+      },
+      select: {
+        externalId: true,
+        to: true,
+        type: true,
+        attributes: true,
       },
     });
 

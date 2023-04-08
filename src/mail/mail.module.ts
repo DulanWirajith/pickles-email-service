@@ -7,6 +7,7 @@ import { MailController } from './mail.controller';
 import { TaskQueueService } from '../task-queue/task-queue.service';
 import { TaskQueueModule } from '../task-queue/task-queue.module';
 import { EmailQueueProducer } from '../task-queue/producer/email-queue.producer';
+import { PrismaService } from '../prisma.service';
 
 @Global()
 @Module({
@@ -17,7 +18,7 @@ import { EmailQueueProducer } from '../task-queue/producer/email-queue.producer'
         secure: false,
         auth: {
           user: 'apikey',
-          pass: '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',
+          pass: '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',
         },
       },
       template: {
@@ -30,7 +31,7 @@ import { EmailQueueProducer } from '../task-queue/producer/email-queue.producer'
     }),
     TaskQueueModule,
   ],
-  providers: [MailService, TaskQueueService, EmailQueueProducer],
+  providers: [MailService, TaskQueueService, EmailQueueProducer, PrismaService],
   exports: [MailService],
   controllers: [MailController],
 })

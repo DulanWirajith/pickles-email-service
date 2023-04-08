@@ -32,7 +32,7 @@ export class TaskQueueService {
       await this.emailQueueProducerService.emailJob(
         {
           ...rest,
-          context: attributes.context,
+          context: attributes?.context,
           isNewAttempt: false,
         },
         2,

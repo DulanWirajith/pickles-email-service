@@ -8,17 +8,15 @@ export class EmailQueueProducer {
   constructor(@InjectQueue(EMAIL_QUEUE) private readonly emailQueue: Queue) {}
 
   async emailJob(data) {
-    // Queue - Daily job
-    // await this.emailQueue.add('send-email', mailSendDto, {
-    //   repeat: {
-    //     cron: '0 */6 * * *',
-    //   },
-    // });
-
     await this.emailQueue.add(data, {
       attempts: 3,
       removeOnComplete: true,
       priority: 1,
+      timeout: 20000,
+      backoff: {
+        type: 'fixed',
+        delay: 5000,
+      },
     });
   }
 }

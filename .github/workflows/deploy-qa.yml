@@ -36,4 +36,4 @@ jobs:
         run: docker build -t dulanwirajith/pickles-email:pes-qa -f .docker/qa-env.Dockerfile .
 
       - name: Docker Push
-        run: docker push dulanwirajith/pickles-email:mli-qa
+        run: docker push dulanwirajith/pickles-email:pes-qa

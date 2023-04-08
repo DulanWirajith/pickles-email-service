@@ -31,21 +31,25 @@ export class EmailQueueConsumer {
   @OnQueueActive()
   async onActive(job: Job) {
     try {
+      this.logger.log(job.data);
       this.logger.debug(
         `Processing - Email Queue ID: ${job.id} with DATA: ${JSON.stringify(
           job.data,
         )}`,
       );
 
-      const { externalId, to, emailType } = job.data;
+      const { externalId, to, emailType, context } = job.data;
       let emailRes;
 
-      if (job.attemptsMade === 0) {
+      if (job.attemptsMade === 0 && job.data.isNewAttempt) {
         emailRes = await this.prisma.email.create({
           data: {
             externalId,
             to,
             type: emailType,
+            attributes: {
+              context,
+            },
           },
         });
       } else {
@@ -55,6 +59,7 @@ export class EmailQueueConsumer {
           },
           select: {
             id: true,
+            attemptsCount: true,
           },
         });
       }
@@ -66,12 +71,14 @@ export class EmailQueueConsumer {
           jobData: job.data,
           job: job as any,
           status: EmailStatusEnum.PROCESS,
+          isNewAttempt: job.data.isNewAttempt,
         },
       });
 
       await this.makeConnection(
         emailRes.id,
         logRes.id,
+        emailRes.attemptsCount,
         EmailStatusEnum.PROCESS,
       );
     } catch (e) {
@@ -94,6 +101,7 @@ export class EmailQueueConsumer {
         },
         select: {
           id: true,
+          attemptsCount: true,
         },
       });
 
@@ -104,12 +112,14 @@ export class EmailQueueConsumer {
           jobData: job.data,
           job: job as any,
           status: EmailStatusEnum.SUCCESS,
+          isNewAttempt: job.data.isNewAttempt,
         },
       });
 
       await this.makeConnection(
         emailRes.id,
         logRes.id,
+        emailRes.attemptsCount,
         EmailStatusEnum.SUCCESS,
       );
     } catch (e) {
@@ -133,6 +143,7 @@ export class EmailQueueConsumer {
         },
         select: {
           id: true,
+          attemptsCount: true,
         },
       });
 
@@ -143,10 +154,16 @@ export class EmailQueueConsumer {
           jobData: job.data,
           job: job as any,
           status: EmailStatusEnum.FAILED,
+          isNewAttempt: job.data.isNewAttempt,
         },
       });
 
-      await this.makeConnection(emailRes.id, logRes.id, EmailStatusEnum.FAILED);
+      await this.makeConnection(
+        emailRes.id,
+        logRes.id,
+        emailRes.attemptsCount,
+        EmailStatusEnum.FAILED,
+      );
     } catch (e) {
       throw new BadRequestException(e);
     }
@@ -155,6 +172,7 @@ export class EmailQueueConsumer {
   async makeConnection(
     emailId: string,
     logId: string,
+    attemptsCount: number,
     emailStatus: EmailStatusEnum,
   ) {
     await this.prisma.email.update({
@@ -163,6 +181,10 @@ export class EmailQueueConsumer {
       },
       data: {
         status: emailStatus,
+        attemptsCount:
+          emailStatus === EmailStatusEnum.PROCESS
+            ? attemptsCount + 1
+            : attemptsCount,
         logs: {
           connect: {
             id: logId,

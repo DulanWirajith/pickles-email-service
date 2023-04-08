@@ -11,27 +11,30 @@ datasource db {
 }
 
 model Email {
-  createdAt  DateTime        @default(now())
-  updatedAt  DateTime        @updatedAt
-  id         String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  externalId String          @unique
-  to         String
-  type       EmailTypesEnum
-  status     EmailStatusEnum @default(PROCESS)
-  logs       TaskQueueLog[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  externalId    String          @unique
+  to            String
+  type          EmailTypesEnum
+  attemptsCount Int             @default(0)
+  attributes    Json?
+  status        EmailStatusEnum @default(PROCESS)
+  logs          TaskQueueLog[]
 }
 
 model TaskQueueLog {
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
-  id        String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  queueName String
-  jobId     String
-  jobData   Json?
-  job       Json?
-  status    EmailStatusEnum
-  Email     Email?          @relation(fields: [emailId], references: [id])
-  emailId   String?         @db.Uuid
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  id           String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  queueName    String
+  jobId        String
+  jobData      Json?
+  job          Json?
+  isNewAttempt Boolean         @default(true)
+  status       EmailStatusEnum
+  Email        Email?          @relation(fields: [emailId], references: [id])
+  emailId      String?         @db.Uuid
 }
 
 enum EmailTypesEnum {

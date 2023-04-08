@@ -88,6 +88,7 @@ export class MailService {
           type: true,
           attemptsCount: true,
           attributes: true,
+          status: true,
         },
       });
       const emailsCount = await this.prisma.email.count({

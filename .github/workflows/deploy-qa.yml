@@ -1,0 +1,39 @@
+name: CI/CD for QA Branch
+
+on:
+  push:
+    branches: [qa]
+  pull_request:
+    branches: [qa]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.15.0]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: yarn
+      - run: yarn lint
+
+      - uses: actions/checkout@v2
+      - name: docker login
+        env:
+          DOCKER_USER: ${{secrets.DOCKER_USER}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+      - name: Build the Docker image
+        run: docker build -t dulanwirajith/pickles-email:pes-qa -f .docker/qa-env.Dockerfile .
+
+      - name: Docker Push
+        run: docker push dulanwirajith/pickles-email:mli-qa

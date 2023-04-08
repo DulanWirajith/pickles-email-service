@@ -17,10 +17,6 @@ export class EventScheduleService {
   })
   async deleteExpiredUsers() {
     // this.logger.log('Deleting expired users...');
-    console.log('resend_failed_mails');
-    console.log(moment().toISOString());
-    console.log(moment().subtract(1, 'hour').toISOString());
-
     const failedJobs = await this.prisma.email.findMany({
       where: {
         status: EmailStatusEnum.FAILED,

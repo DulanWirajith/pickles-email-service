@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { LoggerMiddleware } from './util/logger.middleware';
 import { MailModule } from './mail/mail.module';
 import { TaskQueueModule } from './task-queue/task-queue.module';
+import { EventScheduleModule } from './event-schedule/event-schedule.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { TaskQueueModule } from './task-queue/task-queue.module';
       envFilePath: '.env',
     }),
     TaskQueueModule,
+    EventScheduleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

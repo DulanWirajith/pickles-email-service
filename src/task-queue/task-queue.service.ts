@@ -7,6 +7,9 @@ export class TaskQueueService {
   constructor(private readonly emailQueueProducerService: EmailQueueProducer) {}
 
   public async addToEmailQueue(mailSendDto: MailSendDto) {
-    await this.emailQueueProducerService.emailJob(mailSendDto);
+    await this.emailQueueProducerService.emailJob({
+      ...mailSendDto,
+      isNewAttempt: true,
+    });
   }
 }

@@ -25,6 +25,7 @@ export class EmailQueueConsumer {
 
   @Process()
   async sendEmail(job: Job<unknown>) {
+    console.log(job.data);
     await this.mailService.sendTheMail(job.data as MailSendDto);
   }
 
@@ -40,7 +41,7 @@ export class EmailQueueConsumer {
       const { externalId, to, emailType } = job.data;
       let emailRes;
 
-      if (job.attemptsMade === 0) {
+      if (job.attemptsMade === 0 && job.data.isNewAttempt) {
         emailRes = await this.prisma.email.create({
           data: {
             externalId,

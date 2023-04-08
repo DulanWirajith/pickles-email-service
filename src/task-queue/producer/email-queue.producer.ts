@@ -2,13 +2,12 @@ import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
 import { EMAIL_QUEUE } from '../constants/task-queue-names.constant';
-import { MailSendDto } from '../../mail/dto/mail-send.dto';
 
 @Injectable()
 export class EmailQueueProducer {
   constructor(@InjectQueue(EMAIL_QUEUE) private readonly emailQueue: Queue) {}
 
-  async emailJob(mailSendDto: MailSendDto) {
+  async emailJob(data) {
     // Queue - Daily job
     // await this.emailQueue.add('send-email', mailSendDto, {
     //   repeat: {
@@ -16,9 +15,10 @@ export class EmailQueueProducer {
     //   },
     // });
 
-    await this.emailQueue.add(mailSendDto, {
+    await this.emailQueue.add(data, {
       attempts: 3,
       removeOnComplete: true,
+      priority: 1,
     });
   }
 }

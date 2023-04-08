@@ -1,8 +1,16 @@
-import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { MailService } from './mail.service';
 import { MailSendDto } from './dto/mail-send.dto';
 import { SentryInterceptor } from '../util/sentry.interceptor';
+import { GetEmailsQueryDto } from './dto/get-emails-query.dto';
 
 @UseInterceptors(SentryInterceptor)
 @Controller('mail')
@@ -18,5 +26,10 @@ export class MailController {
   @Post('handle-mail-send')
   handleMailSend(@Body() mailSendDto: MailSendDto) {
     return this.mailService.handleMailSend(mailSendDto);
+  }
+
+  @Get('/get-all-mails')
+  getAllEmails(@Query() getEmailsQueryDto: GetEmailsQueryDto) {
+    return this.mailService.getAllEmails(getEmailsQueryDto);
   }
 }

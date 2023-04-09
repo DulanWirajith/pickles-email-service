@@ -1,11 +1,15 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Request, Response } from 'express';
 import { MailSendDto } from './dto/mail-send.dto';
 import { TaskQueueService } from '../task-queue/task-queue.service';
 import { EMAIL_CONFIG } from './constants/email-config.constant';
 import { EmailTypesEnum } from './enum/email-types.enum';
 import { PrismaService } from '../prisma.service';
 import { GetEmailsQueryDto } from './dto/get-emails-query.dto';
+import { AuthorizeChannelDto } from './dto/channel-authorize.dto';
+import { PusherService } from '../pusher/pusher.service';
 
 @Injectable()
 export class MailService {
@@ -14,6 +18,7 @@ export class MailService {
     private readonly mailerService: MailerService,
     private readonly taskQueueService: TaskQueueService,
     private readonly prisma: PrismaService,
+    private readonly pusherService: PusherService,
   ) {
     this.logger = new Logger(MailService.name);
   }
@@ -102,6 +107,52 @@ export class MailService {
       };
     } catch (e) {
       throw new BadRequestException(e);
+    }
+  }
+
+  authorizeChannel(
+    authorizeChannelDto: AuthorizeChannelDto,
+    req: Request,
+    res: Response,
+  ) {
+    try {
+      // todo Authorization Logic goes here
+
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      const { socket_id } = req.body;
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      const { channel_name } = req.body;
+
+      const presenceData = {
+        user_id: authorizeChannelDto.userId,
+        user_info: {
+          fullName: 'Dulan Lokunarangodage',
+        },
+      };
+
+      const authResponse = this.pusherService.authorizeChannel(
+        socket_id,
+        channel_name,
+        presenceData,
+      );
+
+      res.status(200).send(authResponse);
+    } catch (error) {
+      throw new BadRequestException('something went wrong');
+    }
+  }
+
+  async createEmailNotification() {
+    try {
+      await this.pusherService.trigger(
+        'presence-dulan',
+        'new_email_notification',
+        {
+          hey: 'hey bro',
+        },
+      );
+    } catch (e) {
+      throw new BadRequestException();
     }
   }
 }

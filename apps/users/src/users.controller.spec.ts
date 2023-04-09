@@ -15,8 +15,8 @@ describe('UsersController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(usersController.getHello()).toBe('Hello World!');
+    it('should return "Server is running 🚀"', () => {
+      expect(usersController.checkHealth()).toBe('Users Service is running 🚀');
     });
   });
 });

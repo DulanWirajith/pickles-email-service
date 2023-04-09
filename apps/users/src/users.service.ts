@@ -44,6 +44,5 @@ export class UsersService {
         companyName: 'CodeWithDulan',
       },
     });
-    return newUser;
   }
 }

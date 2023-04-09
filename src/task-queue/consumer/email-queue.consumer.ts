@@ -12,6 +12,7 @@ import { MailService } from '../../mail/mail.service';
 import { MailSendDto } from '../../mail/dto/mail-send.dto';
 import { PrismaService } from '../../prisma.service';
 import { EmailStatusEnum } from '../enum/email-status.enum';
+import { PusherService } from '../../pusher/pusher.service';
 
 @Processor(EMAIL_QUEUE)
 export class EmailQueueConsumer {
@@ -19,6 +20,7 @@ export class EmailQueueConsumer {
   constructor(
     private readonly mailService: MailService,
     private readonly prisma: PrismaService,
+    private readonly pusherService: PusherService,
   ) {
     this.logger = new Logger(EmailQueueConsumer.name);
   }
@@ -52,6 +54,21 @@ export class EmailQueueConsumer {
             },
           },
         });
+        // trigger pusher event
+        await this.pusherService.trigger(
+          'presence-dulan',
+          'new_email_notification',
+          {
+            message: 'New mail send in progress. Please fetch the latest data.',
+            content: {
+              to,
+              externalId,
+              id: emailRes.id,
+              type: emailType,
+              status: EmailStatusEnum.PROCESS,
+            },
+          },
+        );
       } else {
         emailRes = await this.prisma.email.findUnique({
           where: {

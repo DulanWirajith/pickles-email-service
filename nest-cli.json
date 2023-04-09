@@ -1,11 +1,35 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/pickles-email-service/src",
   "compilerOptions": {
     "assets": [
       "mail/templates/**/*"
     ],
-    "watchAssets": true
+    "watchAssets": true,
+    "webpack": true,
+    "tsConfigPath": "apps/pickles-email-service/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/pickles-email-service",
+  "projects": {
+    "pickles-email-service": {
+      "type": "application",
+      "root": "apps/pickles-email-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/pickles-email-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/pickles-email-service/tsconfig.app.json"
+      }
+    },
+    "users": {
+      "type": "application",
+      "root": "apps/users",
+      "entryFile": "main",
+      "sourceRoot": "apps/users/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/users/tsconfig.app.json"
+      }
+    }
   }
 }

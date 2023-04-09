@@ -11,18 +11,18 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "npx prisma generate && nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "npx prisma generate && nest start --watch",
     "start:debug": "npx prisma generate && nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"src/**/*.{js,ts,tsx}\"",
-    "lint:fix": "tsc --noEmit && eslint \"src/**/*.{js,ts,tsx}\" --quiet --fix",
+    "lint": "eslint \"apps/**/src/**/*.{js,ts,tsx}\"",
+    "lint:fix": "tsc --noEmit && eslint \"apps/**/src/**/*.{js,ts,tsx}\" --quiet --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e": "jest --config ./apps/pickles-email-service/test/jest-e2e.json",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -98,7 +98,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -106,8 +106,11 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/apps/"
+    ]
   },
   "config": {
     "commitizen": {

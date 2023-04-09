@@ -32,10 +32,18 @@ export class UsersService {
       password: userRegistrationDto.password,
       id: uuidv4(),
     });
+
+    const newUser = this.usersArr[this.usersArr.length - 1];
     this.picklesEmailClient.emit('new_email_send_request', {
-      to: userRegistrationDto.email,
+      to: newUser.email,
+      externalId: newUser.id,
+      emailType: 'CONFIRM_EMAIL',
+      context: {
+        username: 'Dulan',
+        randomNumber: '12345',
+        companyName: 'CodeWithDulan',
+      },
     });
-    console.log(this.usersArr);
-    return this.usersArr[this.usersArr.length - 1];
+    return newUser;
   }
 }

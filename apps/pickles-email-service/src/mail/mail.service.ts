@@ -44,6 +44,7 @@ export class MailService {
   }
 
   async handleMailSend(mailSendDto: MailSendDto) {
+    console.log('mailsend dto>>', mailSendDto);
     this.taskQueueService.addToEmailQueue(mailSendDto);
   }
 

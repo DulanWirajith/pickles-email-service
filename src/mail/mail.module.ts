@@ -8,6 +8,7 @@ import { TaskQueueService } from '../task-queue/task-queue.service';
 import { TaskQueueModule } from '../task-queue/task-queue.module';
 import { EmailQueueProducer } from '../task-queue/producer/email-queue.producer';
 import { PrismaService } from '../prisma.service';
+import { PusherService } from '../pusher/pusher.service';
 
 @Global()
 @Module({
@@ -31,7 +32,13 @@ import { PrismaService } from '../prisma.service';
     }),
     TaskQueueModule,
   ],
-  providers: [MailService, TaskQueueService, EmailQueueProducer, PrismaService],
+  providers: [
+    MailService,
+    TaskQueueService,
+    EmailQueueProducer,
+    PrismaService,
+    PusherService,
+  ],
   exports: [MailService],
   controllers: [MailController],
 })

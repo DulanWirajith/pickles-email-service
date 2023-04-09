@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import * as Joi from 'joi';
 import { ConfigModule } from '@nestjs/config';
+import { RmqModule } from '@app/common/rmq/rmq.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from './util/logger.middleware';
@@ -25,11 +26,14 @@ import { EventScheduleModule } from './event-schedule/event-schedule.module';
         PUSHER_APP_KEY: Joi.string().required(),
         PUSHER_APP_SECRET: Joi.string().required(),
         PUSHER_APP_CLUSTER: Joi.string().required(),
+        RABBIT_MQ_URI: Joi.string().required(),
+        RABBIT_MQ_EMAIL_SEND_REQUEST_QUEUE: Joi.string().required(),
       }),
       envFilePath: '.env',
     }),
     TaskQueueModule,
     EventScheduleModule,
+    RmqModule,
   ],
   controllers: [AppController],
   providers: [AppService],

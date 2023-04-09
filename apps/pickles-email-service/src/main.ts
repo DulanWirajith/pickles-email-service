@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as Sentry from '@sentry/node';
 import { ValidationPipe } from '@nestjs/common';
+import { RmqService } from '@app/common/rmq/rmq.service';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -38,6 +39,8 @@ async function bootstrap() {
     // FIXME This will prevent empty body
     // new ValidatePayloadExistsPipe(),
   );
+  const rmqService = app.get<RmqService>(RmqService);
+  app.connectMicroservice(rmqService.getOptions('EMAIL_SEND_REQUEST'));
   await app.listen(3000, '0.0.0.0');
 }
 

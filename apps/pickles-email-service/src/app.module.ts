@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import * as Joi from 'joi';
 import { ConfigModule } from '@nestjs/config';
+import { RabbitmqModule, RabbitmqService } from '@app/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from './util/logger.middleware';
@@ -30,9 +31,10 @@ import { EventScheduleModule } from './event-schedule/event-schedule.module';
     }),
     TaskQueueModule,
     EventScheduleModule,
+    RabbitmqModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, RabbitmqService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

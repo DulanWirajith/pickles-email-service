@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as Sentry from '@sentry/node';
 import { ValidationPipe } from '@nestjs/common';
+import { RabbitmqService } from '@app/common';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -38,7 +39,11 @@ async function bootstrap() {
     // FIXME This will prevent empty body
     // new ValidatePayloadExistsPipe(),
   );
+
+  const rabbitmqService = app.get<RabbitmqService>(RabbitmqService);
+  app.connectMicroservice(rabbitmqService.getOptions('EMAIL_SEND_REQUEST'));
   await app.listen(3000, '0.0.0.0');
+  // await app.startAllMicroservices();
 }
 
 bootstrap();

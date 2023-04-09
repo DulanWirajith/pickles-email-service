@@ -176,6 +176,10 @@ $ yarn test:e2e
 $ yarn test:cov
 ```
 
+### Git Workflow
+
+![Screenshot](doc-images/git-workflow.png)
+
 ## Note
 I'd also like to mention two branches in our GitHub repository: **uat** and **dev-with-rabbitmq**.
 

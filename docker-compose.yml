@@ -1,34 +1,45 @@
 services:
   email-service:
     build:
-      dockerfile: .docker/qa-env.Dockerfile
+      dockerfile: ./apps/pickles-email-service/Dockerfile
       context: .
     volumes:
       - .:/usr/src/app
-    environment:
-      - DATABASE_URL=postgresql://postgres:codewithdulan@18.188.114.169:5432/pickles-email?schema=public
-      - SENTRY_DSN=https://17c060aa9a93450ea076a8faec9030c4@o1274453.ingest.sentry.io/4504971668553728
-      - EMAIL_HOST=smtp.sendgrid.net
-      - EMAIL_USER=apikey
-      - EMAIL_PASSWORD=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
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - PUSHER_APP_ID="1581427"
-      - PUSHER_APP_KEY="61bef8916b91f4cb5473"
-      - PUSHER_APP_SECRET="a8c2461af8abebb9af87"
-      - PUSHER_APP_CLUSTER="ap2"
-      - PORT=3000
-    command: npm run start:dev
+    env_file:
+      - .env
+    command: npm run start:dev pickles-email-service
     ports:
       - 3000:3000
     depends_on:
       - redis
+      - rabbitmq
   redis:
     image: redis
     ports:
       - 6379:6379
     volumes:
       - redis:/data
+
+  users:
+    build:
+      context: .
+      dockerfile: ./apps/users/Dockerfile
+      target: development
+    command: npm run start:dev users
+    ports:
+      - 4040:4040
+    env_file:
+      - ./apps/users/.env
+    depends_on:
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - '5672:5672'
 volumes:
   redis:
     driver: local

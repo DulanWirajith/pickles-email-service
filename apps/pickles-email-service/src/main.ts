@@ -41,7 +41,8 @@ async function bootstrap() {
   );
   const rmqService = app.get<RmqService>(RmqService);
   app.connectMicroservice(rmqService.getOptions('EMAIL_SEND_REQUEST'));
-  await app.listen(3000, '0.0.0.0');
+  await app.startAllMicroservices();
+  // await app.listen(3000, '0.0.0.0');
 }
 
 bootstrap();

@@ -193,6 +193,26 @@ To run the dev-with-rabbitmq branch, you can use the docker-compose up command. 
 
 ### Proofs for Solution with RabbitMQ
 
+![Screenshot](doc-images/Screenshot%202023-04-10%20at%2007.14.57.png)
+
+![Screenshot](doc-images/Screenshot%202023-04-10%20at%2007.15.05.png)
+
+![Screenshot](doc-images/Screenshot%202023-04-10%20at%2007.15.17.png)
+
+![Screenshot](doc-images/Screenshot%202023-04-10%20at%2007.15.23.png)
+
+![Screenshot](doc-images/Screenshot%202023-04-10%20at%2007.53.41.png)
+
+![Screenshot](doc-images/Screenshot%202023-04-10%20at%2007.53.58.png)
+
+![Screenshot](doc-images/Screenshot%202023-04-10%20at%2008.05.03.png)
+
+![Screenshot](doc-images/Screenshot%202023-04-10%20at%2008.05.34.png)
+
+![Screenshot](doc-images/Screenshot%202023-04-10%20at%2008.16.38.png)
+
+
+
 
 ## Stay in touch
 

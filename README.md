@@ -1,25 +1,5 @@
 # PICKLES-EMAIL-SERVICE
 
-## Stay in touch
-
-- Author - [Dulan Wirajith](https://www.linkedin.com/in/dulanwirajith/)
-- Website - [https://dulanwirajith.com](https://dulanwirajith.com/)
-
-
-## Committing without running pre-commit hook
-```
-git commit -m 'commit message' --no-verify
-```
-
-## Committing using commitizen package
-commitizen package helps to work with conventional commits
-
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
-
-```
-git cz
-```
-
 ## Tech stack
 ```
 - NestJS: for handling server asynchronously and API development
@@ -163,6 +143,30 @@ When you trigger **get mails** request, you will see response came back with 200
 ![Screenshot](doc-images/Screenshot%202023-04-09%20at%2014.13.00.png)
 
 
+## Diagrams - Flow Diagram
+
+### For All Details
+https://drive.google.com/file/d/1s_fuBgBp3zpEiuSuw1jeV_ldWpJM-GgQ/view?usp=sharing
+
+### Solution with AWS and Lambda 
+![Screenshot](doc-images/with%20aws%20solution%20-%20only%20PICKLES%20EMAIL%20SERVICE.jpeg)
+
+Please note that I have only developed the Pickles email server. The processes related to Pickles email server will be described next.
+
+Here's how we handle an API request that comes to the Pickles Email Server.
+![Screenshot](doc-images/When%20comes%20API%20Request%20to%20Pickles%20Email%20Server.jpeg)
+
+Now, I will describe the Task Queue Process.
+![Screenshot](doc-images/Task%20Queue%20Process.jpeg)
+
+Here is the Task Scheduler Process
+![Screenshot](doc-images/Task%20Scheduler%20Process.jpeg)
+
+
+### Solution with RabbitMQ
+![Screenshot](doc-images/with%20rabbitmq%20solution%20-%20PICKLES%20EMAIL%20SERVICE%20and%20USERS%20SERVICE.jpeg)
+
+
 ## Test
 
 ```bash
@@ -186,3 +190,26 @@ I'd also like to mention two branches in our GitHub repository: **uat** and **de
 If you want to run only the Pickles Email Server, you can try using the **uat** branch. On the other hand, if you're interested in exploring a more complex setup that includes RabbitMQ for communication, you can try the **dev-with-rabbitmq** branch. This branch contains two separate applications: users and pickles-email-server.
 
 To run the dev-with-rabbitmq branch, you can use the docker-compose up command. This will start both the users and pickles-email-server applications, and they will communicate with each other using RabbitMQ.
+
+### Proofs for Solution with RabbitMQ
+
+
+## Stay in touch
+
+- Author - [Dulan Wirajith](https://www.linkedin.com/in/dulanwirajith/)
+- Website - [https://dulanwirajith.com](https://dulanwirajith.com/)
+
+
+## Committing without running pre-commit hook
+```
+git commit -m 'commit message' --no-verify
+```
+
+## Committing using commitizen package
+commitizen package helps to work with conventional commits
+
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
+```
+git cz
+```
